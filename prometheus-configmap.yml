@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-server-conf
+  labels:
+    name: prometheus-server-conf
+data:
+  prometheus.yml: |-
+    global:
+      scrape_interval: 5s
+      evaluation_interval: 5s
+    rule_files:
+      #- /etc/prometheus/prometheus.rules
+    alerting:
+      alertmanagers:
+      - scheme: http
+        static_configs:
+        - targets:
+          #- "alertmanager.monitoring.svc:9093"
+    scrape_configs:
+      - job_name: 'prometheus'
+        
+        static_configs:
+        - targets: ['localhost:9090',
+            'localhost:9100',
+            'localhost:9095',
+            'freeradius.omnius.corp:9100',
+            '172.23.255.77:9100',
+            'confluence.internal.omnius.com:9100',
+            'unifi.internal.omnius.com:9100',
+            'bitbucket.internal.omnius.com:9100',
+            'postgresql.internal.omnius.com:9100',
+            'openvpn.internal.omnius.com:9100']
