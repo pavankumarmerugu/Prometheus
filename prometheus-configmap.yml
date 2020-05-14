@@ -21,13 +21,4 @@ data:
       - job_name: 'prometheus'
         
         static_configs:
-        - targets: ['localhost:9090',
-            'localhost:9100',
-            'localhost:9095',
-            'freeradius.omnius.corp:9100',
-            '172.23.255.77:9100',
-            'confluence.internal.omnius.com:9100',
-            'unifi.internal.omnius.com:9100',
-            'bitbucket.internal.omnius.com:9100',
-            'postgresql.internal.omnius.com:9100',
-            'openvpn.internal.omnius.com:9100']
+        - targets: ['localhost:9090']
