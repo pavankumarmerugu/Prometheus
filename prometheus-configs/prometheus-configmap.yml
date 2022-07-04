@@ -26,3 +26,12 @@ data:
       - job_name: 'targets'
         static_configs:
         - targets: ['ws1:9100']
+
+      - job_name: 'kube-state-metrics'                                # Job to get the kubernetes pods, nodes, PV, PVC....metrics
+        static_configs:
+        - targets: ['kube-state-metrics.kube-system.svc.cluster.local:8080']
+        relabel_configs:
+          - source_labels: [__address__]
+            target_label: instance
+            regex: '([^:]+)(:[0-9]+)?'
+            replacement: '${1}'

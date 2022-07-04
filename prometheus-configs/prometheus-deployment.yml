@@ -26,9 +26,18 @@ spec:
               volumeMounts:
               - name: prometheus-config
                 mountPath: /etc/prometheus/
+            - name: configmap-reload
+              image: jimmidyson/configmap-reload:latest
+              args:
+              - --volume-dir=/etc/prometheus/
+              - --webhook-url=http://localhost:9090/-/reload
+              resources:
+               {}
+              volumeMounts:
+              - name: prometheus-config
+                mountPath: /etc/prometheus/
             volumes:
             - name: prometheus-config
               configMap:
                 defaultMode: 420
                 name: prometheus-server-conf
-
