@@ -153,6 +153,7 @@ data:
     # Default UI theme ("dark" or "light")
     ;default_theme = dark
     [auth]
+    token_rotation_interval_minutes=600
     # Set to true to disable (hide) the login form, useful if you use OAuth, defaults to false
     ;disable_login_form = false
     # Set to true to disable the signout link in the side menu. useful if you use auth.proxy, defaults to false
