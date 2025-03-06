@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata: 
+metadata:
     name: grafana-deployment
     namespace: monitoring
 spec:
-    replicas: 2
+    replicas: 1
     selector:
         matchLabels:
             app: grafana-server
@@ -14,7 +14,7 @@ spec:
             app: grafana-server
         spec:
             containers:
-            - name: grafana  
+            - name: grafana
               image: grafana/grafana:latest
               ports:
               - containerPort: 3000
@@ -28,6 +28,5 @@ spec:
               configMap:
                 defaultMode: 420
                 name: grafana-server-conf
-                
             - name: grafana-storage-volume
               emptyDir: {}
