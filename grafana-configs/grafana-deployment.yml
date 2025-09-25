@@ -1,32 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: grafana-deployment
-    namespace: monitoring
+  name: grafana-deployment
+  namespace: monitoring
 spec:
-    replicas: 1
-    selector:
-        matchLabels:
-            app: grafana-server
-    template:
-        metadata:
-          labels:
-            app: grafana-server
-        spec:
-            containers:
-            - name: grafana
-              image: grafana/grafana:latest
-              ports:
-              - containerPort: 3000
-              volumeMounts:
-              - name: grafana-config-volume
-                mountPath: /etc/grafana/
-              - name: grafana-storage-volume
-                mountPath: /grafana/
-            volumes:
-            - name: grafana-config-volume
-              configMap:
-                defaultMode: 420
-                name: grafana-server-conf
-            - name: grafana-storage-volume
-              emptyDir: {}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-server
+  template:
+    metadata:
+      labels:
+        app: grafana-server
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:latest
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: grafana-config-volume
+          mountPath: /etc/grafana/
+        - name: grafana-storage-volume
+          mountPath: /var/lib/grafana   # prefer Grafana default data dir
+        env:
+        - name: GF_PATHS_PROVISIONING
+          value: /etc/grafana/provisioning
+      initContainers:
+      - name: init-chown-grafana
+        image: busybox
+        command: ["sh","-c","chown -R 472:472 /var/lib/grafana || true"]
+        volumeMounts:
+        - name: grafana-storage-volume
+          mountPath: /var/lib/grafana
+      volumes:
+      - name: grafana-config-volume
+        configMap:
+          defaultMode: 420
+          name: grafana-server-conf
+      - name: grafana-storage-volume
+        persistentVolumeClaim:
+          claimName: grafana-pvc
